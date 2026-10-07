@@ -30,8 +30,10 @@ from tools import (
     search_products,
 )
 
-# backend/agent.py -> backend -> 4 -> Homework -> course root (.env lives here)
-ENV_PATH = Path(__file__).resolve().parents[3] / ".env"
+# backend/agent.py -> backend -> repo root (.env lives here). Resolved
+# relative to this repo, not the original course folder structure, so it
+# still works correctly after a fresh `git clone` anywhere on disk.
+ENV_PATH = Path(__file__).resolve().parents[1] / ".env"
 load_dotenv(ENV_PATH)
 
 PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY")

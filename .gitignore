@@ -9,5 +9,8 @@ frontend/node_modules
 frontend/dist
 frontend/.env
 
+# Secrets (PORTKEY_API_KEY) — see .env.example
+.env
+
 # OS
 .DS_Store
