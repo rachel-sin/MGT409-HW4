@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Campus Customs — App Check (Problem 11)</title>
+<style>
+  :root {
+    --yale-blue: #00356b;
+    --yale-blue-bright: #286dc0;
+    --yale-gray: #978d85;
+    --border: #e4dfda;
+    --text: #211e1b;
+    --text-muted: #6b625b;
+    --card-bg: #f4f2f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 16px/1.5 'Segoe UI', system-ui, Roboto, sans-serif;
+    color: var(--text);
+    background: #fff;
+  }
+  header {
+    background: var(--yale-blue);
+    color: #fff;
+    padding: 28px 32px;
+  }
+  header h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+  }
+  header p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 15px;
+  }
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+  .check {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    background: #fff;
+  }
+  .check h2 {
+    margin: 0 0 4px;
+    color: var(--yale-blue);
+    font-size: 20px;
+  }
+  .check .subtitle {
+    margin: 0 0 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .check img {
+    display: block;
+    width: 100%;
+    max-width: 760px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .check p.caption {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .verified-tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--yale-blue);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  footer {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Campus Customs — Live App Check</h1>
+  <p>Problem 11: three real, screenshotted checks of the live site and chatbot, verified against the actual database.</p>
+</header>
+
+<main>
+
+  <section class="check">
+    <p class="subtitle">Check 1 of 3 — Chat Inventory Lookup</p>
+    <h2>Chat correctly pulls real stock and price from the database</h2>
+    <img src="app_check_images/inventory.jpg" alt="Chat widget answering a stock and price question for the Basic Hoodie Big Yale" />
+    <p class="caption">
+      Asked the chatbot for the price and stock of the Basic Hoodie Big Yale. It replied with $68.00 and the exact
+      per-size counts (XS 15, S 5, M 5, L 8, XL 2, XXL 25) — matching <code>campus_customs.db</code> exactly, with no
+      invented numbers.
+    </p>
+    <span class="verified-tag">Verified against campus_customs.db</span>
+  </section>
+
+  <section class="check">
+    <p class="subtitle">Check 2 of 3 — Dynamic Search (Problem 7)</p>
+    <h2>A category question in chat produces real product cards on the page</h2>
+    <img src="app_check_images/search_results.jpg" alt="Products page showing 10 crewneck result cards after asking the chatbot a category question" />
+    <p class="caption">
+      Asked the chatbot "what crewnecks do you have?" — it searched the catalogue and the browser automatically
+      navigated to the Products page, now filtered to the 10 real matching crewnecks shown as full cards.
+    </p>
+  </section>
+
+  <section class="check">
+    <p class="subtitle">Check 3 of 3 — Usability Improvement (Problem 9)</p>
+    <h2>Low-stock badges on the product grid</h2>
+    <img src="app_check_images/usability_feature.jpg" alt="Product grid card for the Football Left Chest T Shirt showing an Only 9 Left badge" />
+    <p class="caption">
+      The Football Left Chest T Shirt — with 9 total units left across all sizes — shows an "Only 9 Left" badge
+      directly on its grid card, so a shopper sees scarcity before ever opening the product.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  Generated from the live local app (frontend on :5173, backend on :8000) against the real <code>campus_customs.db</code>.
+</footer>
+
+</body>
+</html>

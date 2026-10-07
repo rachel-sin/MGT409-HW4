@@ -1,4 +1,6 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { logout as logoutRequest } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -12,6 +14,17 @@ const authLinks = [
 ]
 
 function Navbar() {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    if (user) {
+      await logoutRequest(user.sessionToken)
+    }
+    logout()
+    navigate('/')
+  }
+
   return (
     <header className="navbar">
       <NavLink to="/" className="brand">
@@ -30,17 +43,26 @@ function Navbar() {
         ))}
       </nav>
       <div className="auth-links">
-        {authLinks.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            className={({ isActive }) =>
-              isActive ? 'nav-link auth active' : 'nav-link auth'
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
+        {user ? (
+          <>
+            <span className="nav-greeting">Hi, {user.firstName}</span>
+            <button type="button" className="nav-link auth" onClick={handleLogout}>
+              Log Out
+            </button>
+          </>
+        ) : (
+          authLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                isActive ? 'nav-link auth active' : 'nav-link auth'
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))
+        )}
       </div>
     </header>
   )
