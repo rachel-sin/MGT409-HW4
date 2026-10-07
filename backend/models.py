@@ -180,6 +180,14 @@ class ShopperContext(BaseModel):
 
     logged_in: bool
     first_name: str | None = Field(None, description="Only present when logged_in is True")
+    email: str | None = Field(
+        None,
+        description=(
+            "Only present when logged_in is True. For identification context only — "
+            "see prompts/prompt.md's Safety rules: never repeat this back to the "
+            "shopper or anyone else in a reply."
+        ),
+    )
     page: str = Field(..., description="Same values as PageContext.page")
     viewing_product_id: str | None = None
     viewing_product_name: str | None = None

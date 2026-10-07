@@ -69,6 +69,7 @@ class ChatDeps:
 
     stock_lookups: int = 0
     first_name: str | None = None
+    email: str | None = None
     page: str = "unknown"
     viewing_product_id: str | None = None
     viewing_product_name: str | None = None
@@ -115,6 +116,7 @@ def get_shopper_context_tool(ctx: RunContext[ChatDeps]) -> ShopperContext:
     return ShopperContext(
         logged_in=ctx.deps.first_name is not None,
         first_name=ctx.deps.first_name,
+        email=ctx.deps.email,
         page=ctx.deps.page,
         viewing_product_id=ctx.deps.viewing_product_id,
         viewing_product_name=ctx.deps.viewing_product_name,
@@ -250,11 +252,28 @@ def _normalize_spelling(message: str) -> str:
     return re.sub(r"\bgrey\b", "gray", message, flags=re.IGNORECASE)
 
 
+def _redact_email_disclosure(reply: ChatReply, email: str | None) -> ChatReply:
+    """Structural backstop for the prompt rule that the agent must never
+    repeat a shopper's own email back to them. Prompt-only enforcement did
+    NOT reliably hold under testing — even a strongly-worded rule naming the
+    exact failure mode ("it's their own data, confirming it is fine") still
+    got overridden when a shopper directly asked to "confirm" their email,
+    because the model judged that disclosure harmless rather than against
+    the rule. This guarantees the literal address can't reach the shopper
+    regardless of what the model decides to say, the same way the stock-
+    lookup cap is code-enforced rather than merely requested."""
+    if not email or email.lower() not in reply.message.lower():
+        return reply
+    redacted = re.sub(re.escape(email), "[not shown for privacy]", reply.message, flags=re.IGNORECASE)
+    return reply.model_copy(update={"message": redacted})
+
+
 def run_chat(
     message: str,
     history: list[ModelMessage] | None = None,
     user_id: int | None = None,
     first_name: str | None = None,
+    email: str | None = None,
     page: str = "unknown",
     viewing_product_id: str | None = None,
     viewing_product_name: str | None = None,
@@ -268,13 +287,14 @@ def run_chat(
         model_input = _normalize_spelling(message)
         deps = ChatDeps(
             first_name=first_name,
+            email=email,
             page=page,
             viewing_product_id=viewing_product_id,
             viewing_product_name=viewing_product_name,
         )
         result = agent.run_sync(model_input, message_history=history or [], deps=deps)
         tool_calls = _extract_tool_calls(result.all_messages())
-        return result.output
+        return _redact_email_disclosure(result.output, email)
     except Exception:
         stop_reason = "error"
         raise

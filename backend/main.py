@@ -350,11 +350,14 @@ def chat(payload: ChatRequest, request: Request) -> ChatResponse:
             prune_chat_history(conn, user_id)
 
         first_name: str | None = None
+        email: str | None = None
         if user_id is not None:
             user_row = conn.execute(
-                "SELECT first_name FROM users WHERE id = ?", (user_id,)
+                "SELECT first_name, email FROM users WHERE id = ?", (user_id,)
             ).fetchone()
-            first_name = user_row["first_name"] if user_row else None
+            if user_row is not None:
+                first_name = user_row["first_name"]
+                email = user_row["email"]
 
         # viewing_product_name is resolved from the catalogue here, server-
         # side, by the client-supplied product_id — never taken from
@@ -378,6 +381,7 @@ def chat(payload: ChatRequest, request: Request) -> ChatResponse:
                 history=history,
                 user_id=user_id,
                 first_name=first_name,
+                email=email,
                 page=page_context.page if page_context else "unknown",
                 viewing_product_id=viewing_product_id,
                 viewing_product_name=viewing_product_name,
