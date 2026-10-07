@@ -18,14 +18,13 @@ You'll need Python 3.11+, Node 18+, a [Portkey](https://portkey.ai) API key, and
 
 ```bash
 git clone <this-repo-url>
-cd campus-customs   # or whatever you named it
+cd hw4   # or whatever you named it
 
 # API key — needed by the backend
 cp .env.example .env
 # then edit .env and paste in a real PORTKEY_API_KEY
 
-# Backend
-cd backend
+# Backend — venv + deps live at the repo root, alongside requirements.txt
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -39,10 +38,12 @@ npm install
 ## Running it
 
 ```bash
-# Terminal 1 — backend, from backend/ with its venv active
+# Terminal 1 — backend, from the repo root with its venv active
+cd backend
 uvicorn main:app --reload --port 8000
 
 # Terminal 2 — frontend, from frontend/
+cd frontend
 npm run dev
 ```
 
