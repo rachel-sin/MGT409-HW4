@@ -12,5 +12,9 @@ frontend/.env
 # Secrets (PORTKEY_API_KEY) — see .env.example
 .env
 
+# Seed data — not committed; see README for what to supply locally
+data/campus_customs.db
+data/products/
+
 # OS
 .DS_Store

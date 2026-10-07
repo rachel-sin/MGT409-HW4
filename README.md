@@ -4,9 +4,17 @@ A Yale-themed apparel storefront (React + FastAPI) with an AI shopping assistant
 
 Built for AI Foundations for Managers, Homework 4. The full build log — every prompt, what was built, and how it was verified — is in [`AI_prompts.md`](AI_prompts.md). The complete technical reference (database, API contract, agent tools, safety rules, and specs) is in [`output/harness.md`](output/harness.md).
 
+## Data not included
+
+`data/campus_customs.db` and `data/products/` (the product photos) are **not** in this repo — gitignored on purpose, since the database contains seeded account data and the images are a lot of binary weight. **The app will not run without them.** If you need to run it rather than just read the code, ask for the data files separately (or see `output/app_check.html` for screenshotted proof the app runs correctly, and `output/harness.md`'s Database Field Reference for the exact schema if you're reconstructing the database yourself).
+
+What's expected on disk if you do have the data files:
+- `data/campus_customs.db` — SQLite, schema documented in `output/harness.md` (`catalogue`, `inventory`, `users`, `chat_messages`, `sessions`)
+- `data/products/<product_id>.jpg` — one image per catalogue row, filename matching `catalogue.image_file_path`
+
 ## Setup
 
-You'll need Python 3.11+, Node 18+, and a [Portkey](https://portkey.ai) API key.
+You'll need Python 3.11+, Node 18+, a [Portkey](https://portkey.ai) API key, and the data files above in place.
 
 ```bash
 git clone <this-repo-url>
@@ -38,7 +46,7 @@ uvicorn main:app --reload --port 8000
 npm run dev
 ```
 
-Open the URL Vite prints (`http://localhost:5173`). The seeded database (`data/campus_customs.db`) already has products, inventory, and a few user accounts, so there's nothing else to set up — sign up for a new account or chat as a guest right away.
+Open the URL Vite prints (`http://localhost:5173`).
 
 ## What's here
 
@@ -46,7 +54,7 @@ Open the URL Vite prints (`http://localhost:5173`). The seeded database (`data/c
 |---|---|
 | `backend/` | FastAPI app — `main.py` (routes), `agent.py`/`tools.py`/`models.py`/`prompts/` (the PydanticAI shopping assistant), `auth.py`/`sessions.py` (accounts) |
 | `frontend/` | React + Vite + TypeScript storefront |
-| `data/` | The seed SQLite database and product images |
+| `data/` | Where the SQLite database and product images go locally — not committed, see "Data not included" above |
 | `output/harness.md` | The full technical reference — start here to understand how the system works |
 | `output/usability.md` | Problem 9's usability-improvement menu and what was built |
 | `output/design.md` | Problem 10's visual design system, sourced from Yale's official brand guidelines |
